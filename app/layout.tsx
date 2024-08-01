@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { Assistant } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
-const assistant = Assistant({ subsets: ["latin"] });
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Runner - Automation Tool",
@@ -16,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={assistant.className}>
+      <body className={poppins.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

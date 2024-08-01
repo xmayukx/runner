@@ -1,6 +1,8 @@
+import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { HoverBorderGradient } from "./hover-border-gradient";
 
 type Props = {};
 
@@ -37,6 +39,20 @@ export const Navbar = async (props: Props) => {
           </li>
         </ul>
       </nav>
+      <aside className="flex items-center gap-4">
+        <Link href="/dashboard">
+          <HoverBorderGradient>
+            {
+              //WIP: wire up auth state
+              true ? "Dashboard" : "Get Started"
+            }
+          </HoverBorderGradient>
+        </Link>
+        {
+          //WIP: wire up auth state
+        }
+        <MenuIcon className="md:hidden" />
+      </aside>
     </header>
   );
 };
