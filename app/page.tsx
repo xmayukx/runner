@@ -1,9 +1,77 @@
 import { ContainerScroll } from "@/components/global/container-scroll-animation";
 import { InfiniteMovingCards } from "@/components/global/infinite-moving-cards";
 import { Navbar } from "@/components/global/navbar";
+import PricingCards from "@/components/pricingCards";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { clients } from "@/lib/constants";
 import Image from "next/image";
+
+export type Feature = {
+  name: string;
+  disabled: boolean;
+};
+
+// Define the PricingPlan type
+export type PricingPlan = {
+  title: string;
+  price: string;
+  features: Feature[];
+};
+
+export const pricing: PricingPlan[] = [
+  {
+    title: "Basic",
+    price: "$9.99",
+    features: [
+      {
+        name: "Unlimited Projects",
+        disabled: false,
+      },
+      {
+        name: "Unlimited Storage",
+        disabled: false,
+      },
+      {
+        name: "Priority Support",
+        disabled: true,
+      },
+      {
+        name: "Unlimited Users",
+        disabled: false,
+      },
+    ],
+  },
+  {
+    title: "Pro",
+    price: "$19.99",
+    features: [
+      {
+        name: "Unlimited Projects",
+        disabled: false,
+      },
+      {
+        name: "Unlimited Storage",
+        disabled: false,
+      },
+      {
+        name: "Priority Support",
+        disabled: false,
+      },
+      {
+        name: "Unlimited Users",
+        disabled: false,
+      },
+    ],
+  },
+];
 
 export default function Home() {
   return (
@@ -41,42 +109,28 @@ export default function Home() {
         </div>
       </section>
       <section className=" mt-[500px]">
-        {/* <div className=" flex flex-wrap items-center justify-center flex-col md:flex-row gap-8 -mt-72"></div>  */}
-        <div className="flex flex-col items-center justify-center gap-8">
-          <h1 className="text-5xl font-bold mb-6">
-            Select a subscription <br /> that works for you
+        <div className="flex flex-col gap-y-10 justify-center ">
+          {/* Title  */}
+          <h1 className="lg:text-7xl md:text-6xl text-5xl font-semibold flex flex-col font-sans text-center">
+            {" "}
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-zinc-200 to-zinc-500 relative lg:right-5 md:right-3 font-bold tracking-tight ">
+              <span className=" ">Select</span> a subscription
+            </span>
+            <span className=" relative lg:left-24 md:left-15 bg-clip-text text-transparent bg-gradient-to-b from-zinc-200 to-zinc-500 font-extrabold tracking-tight">
+              that works <span className="">for you</span>{" "}
+            </span>
           </h1>
-          <div className="flex space-x-6">
-            <div className="bg-lime-200 p-6 rounded-lg shadow-lg w-80">
-              <h2 className="text-xl font-bold mb-4">Standard</h2>
-              <p className="text-4xl font-bold mb-4">$955/m</p>
-              <ul className="mb-6">
-                <li className="mb-2">- 1 Request at a time</li>
-                <li className="mb-2">- Average 48h turnaround</li>
-                <li className="mb-2">- Pause or cancel anytime</li>
-                <li className="line-through mb-2">- Priority support</li>
-                <li className="line-through mb-2">- Goodnight wishes</li>
-                <li className="mb-2">+ Webflow development</li>
-              </ul>
-              <button className="bg-black text-white py-2 px-4 rounded">
-                Purchase
-              </button>
-            </div>
-            <div className="bg-purple-200 p-6 rounded-lg shadow-lg w-80">
-              <h2 className="text-xl font-bold mb-4">Plus</h2>
-              <p className="text-4xl font-bold mb-4">$1500/m</p>
-              <ul className="mb-6">
-                <li className="mb-2">- 2 Requests at a time</li>
-                <li className="mb-2">- Average 24h - 48h turnaround</li>
-                <li className="mb-2">- Pause or cancel anytime</li>
-                <li className="mb-2">- Priority support</li>
-                <li className="mb-2">- Goodnight wishes</li>
-                <li className="mb-2">+ Webflow development</li>
-              </ul>
-              <button className="bg-black text-white py-2 px-4 rounded">
-                Purchase
-              </button>
-            </div>
+
+          {/* Cards */}
+          <div className="lg:flex lg:space-x-5 lg:mx-[15%] md:mx-[20%] mx-[15%] gap-y-2">
+            {pricing.map((price, key) => (
+              <PricingCards
+                key={key}
+                title={price.title}
+                price={price.price}
+                features={price.features}
+              />
+            ))}
           </div>
         </div>
       </section>
