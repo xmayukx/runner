@@ -87,11 +87,11 @@ export default function Home() {
                   size={"lg"}
                   className="p-8 mb-8 md:mb-0 text-2xl w-full sm:w-fit border-t-2 border-r-2 border-solid rounded-full border-[#4D4D4D] bg-[#1F1F1F] hover:bg-white group transition-all flex items-center justify-center gap-4 hover:shadow-lg hover:shadow-neutral-600 duration-500"
                 >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-600  md:text-center font-sans group-hover:bg-gradient-to-r group-hover:from-black goup-hover:to-black">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-600  md:text-center group-hover:bg-gradient-to-r group-hover:from-black goup-hover:to-black">
                     Start For Free Today
                   </span>
                 </Button>
-                <h1 className="text-5xl md:text-8xl tracking-tight  bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-600 font-sans font-bold">
+                <h1 className=" text-5xl md:text-8xl font-clashDisplay bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-600 font-bold tracking-tight">
                   Automate Your Work With Runner
                 </h1>
               </div>
@@ -111,13 +111,17 @@ export default function Home() {
       <section className=" mt-[500px]">
         <div className="flex flex-col gap-y-10 justify-center ">
           {/* Title  */}
-          <h1 className="lg:text-7xl md:text-6xl text-5xl font-semibold flex flex-col font-sans text-center">
+          <h1 className="lg:text-7xl md:text-6xl text-5xl flex flex-col text-center font-semibold tracking-tighter font-clashDisplay">
             {" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-b from-zinc-200 to-zinc-500 relative lg:right-5 md:right-3 font-bold tracking-tight ">
-              <span className=" ">Select</span> a subscription
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-zinc-200 to-zinc-500 relative lg:right-5 md:right-3 tracking-tight ">
+              <span className=" ">Select</span> a{" "}
+              <div className="relative inline-block">
+                <span className="absolute inset-0 bg-stone-200 transform -rotate-1 -z-10"></span>
+                <span className="relative text-stone-700">subscription</span>
+              </div>
             </span>
-            <span className=" relative lg:left-24 md:left-15 bg-clip-text text-transparent bg-gradient-to-b from-zinc-200 to-zinc-500 font-extrabold tracking-tight">
-              that works <span className="">for you</span>{" "}
+            <span className="flex justify-center bg-clip-text text-transparent bg-gradient-to-b from-zinc-200 to-zinc-500 tracking-tight">
+              that works <span className=""> for you</span>{" "}
             </span>
           </h1>
 

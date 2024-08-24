@@ -13,7 +13,14 @@ import { Feature, pricing, PricingPlan } from "@/app/page";
 
 function PricingCards({ title, price, features }: PricingPlan) {
   return (
-    <Card className=" w-full mx-auto rounded-2xl border  border-zinc-600  bg-gradient-to-tr from-neutral-900 from-[50%] to-neutral-800">
+    <Card
+      className={cn(
+        " w-full mx-auto rounded-2xl border  border-zinc-600  bg-gradient-to-tr from-neutral-900 from-[50%] to-neutral-800",
+        {
+          " border border-white": title === "Pro",
+        },
+      )}
+    >
       <CardHeader>
         <CardTitle className=" flex justify-between">
           <span className=" text-4xl font-sans tracking-tight">{title}</span>
