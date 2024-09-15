@@ -3,34 +3,20 @@ import React from "react";
 import ProfilePicture from "./_components/profile-picture";
 import { db } from "@/lib/db";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { User } from "@/lib/types";
 
 async function Page() {
   const authUser = await currentUser();
   if (!authUser) {
     return null;
   }
-  const user = await db.user.findUnique({ where: { clerkId: authUser.id } });
-  const removeProfileImage = async () => {
-    "use server";
-    const response = await db.user.update({
-      where: {
-        clerkId: authUser.id,
-      },
-      data: {
-        profileImage: "",
-      },
-    });
-    return response;
-  };
+  const user: User | null = await db.user.findUnique({
+    where: { clerkId: authUser.id },
+  });
 
-  const upload = async (image: string) => {
-    "use server";
-    const response = await db.user.update({
-      where: { clerkId: authUser.id },
-      data: { profileImage: image },
-    });
-    return response;
-  };
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className=" flex flex-col gap-4 ">
@@ -44,12 +30,8 @@ async function Page() {
             Add or update your information
           </p>
         </div>
-        <ProfilePicture
-          onDelete={removeProfileImage}
-          onUpload={upload}
-          userImage={user?.profileImage || ""}
-        />
-        <ProfileForm />
+        <ProfilePicture userImage={user?.profileImage || ""} />
+        <ProfileForm user={user} />
       </div>
     </div>
   );

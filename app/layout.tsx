@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { Poppins, Bricolage_Grotesque } from "next/font/google";
-import localfont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { bric, clashDisplay } from "@/lib/fonts";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Toast } from "@/components/ui/toast";
 export const metadata: Metadata = {
   title: "Runner - Automation Tool",
   description: "A automation tool for your daily tasks",
@@ -33,6 +26,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Toast />
             {children}
           </ThemeProvider>
         </body>

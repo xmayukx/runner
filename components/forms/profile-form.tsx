@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EditUserProfileSchema } from "@/lib/types";
+import { EditUserProfileSchema, User } from "@/lib/types";
 import {
   Form,
   FormControl,
@@ -16,20 +16,41 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 
-function ProfileForm() {
+type props = {
+  user: User;
+  onUpdate?: any;
+};
+
+function ProfileForm({ user, onUpdate }: props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof EditUserProfileSchema>>({
     mode: "onChange",
     resolver: zodResolver(EditUserProfileSchema),
     defaultValues: {
-      email: "",
-      name: "",
+      email: user.email,
+      name: user.name || "",
     },
   });
+
+  const handleSubmit = async (value: z.infer<typeof EditUserProfileSchema>) => {
+    setIsLoading(true);
+    await onUpdate(value);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    form.reset({
+      email: user.email,
+      name: user.name || "",
+    });
+  }, [user]);
   return (
     <Form {...form}>
-      <form className=" flex flex-col gap-6">
+      <form
+        className=" flex flex-col gap-6"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <FormField
           disabled={isLoading}
           control={form.control}
