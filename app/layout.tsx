@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { bric, clashDisplay } from "@/lib/fonts";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Toast } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
 export const metadata: Metadata = {
   title: "Runner - Automation Tool",
   description: "A automation tool for your daily tasks",
@@ -26,7 +26,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Toast />
+            <Toaster />
             {children}
           </ThemeProvider>
         </body>
