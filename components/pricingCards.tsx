@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { Feature, pricing, PricingPlan } from "@/app/page";
+import { PricingPlan } from "@/lib/constants";
 
 function PricingCards({ title, price, features }: PricingPlan) {
   return (

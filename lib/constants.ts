@@ -12,6 +12,65 @@ export const clients = [...new Array(10)].map((client, index) => ({
   href: `/${index + 1}.png`,
 }));
 
+export type Feature = {
+  name: string;
+  disabled: boolean;
+};
+
+// Define the PricingPlan type
+export type PricingPlan = {
+  title: string;
+  price: string;
+  features: Feature[];
+};
+
+export const pricing: PricingPlan[] = [
+  {
+    title: "Basic",
+    price: "$9.99",
+    features: [
+      {
+        name: "Unlimited Projects",
+        disabled: false,
+      },
+      {
+        name: "Unlimited Storage",
+        disabled: false,
+      },
+      {
+        name: "Priority Support",
+        disabled: true,
+      },
+      {
+        name: "Unlimited Users",
+        disabled: false,
+      },
+    ],
+  },
+  {
+    title: "Pro",
+    price: "$19.99",
+    features: [
+      {
+        name: "Unlimited Projects",
+        disabled: false,
+      },
+      {
+        name: "Unlimited Storage",
+        disabled: false,
+      },
+      {
+        name: "Priority Support",
+        disabled: false,
+      },
+      {
+        name: "Unlimited Users",
+        disabled: false,
+      },
+    ],
+  },
+];
+
 export const menuOptions = [
   {
     name: "Dashboard",

@@ -1,3 +1,4 @@
+"use client";
 import { EditorCanvasCardType } from "@/lib/types";
 import { useEditor } from "@/providers/editor-provider";
 import { Position, useNodeId } from "@xyflow/react";
@@ -56,13 +57,17 @@ function EditorCanvasCardSingle({ data }: { data: EditorCanvasCardType }) {
           {data.type}
         </Badge>
         <div
-          className={clsx(" absolute left-3 top-4 h-2 w-2 rounded-full", {
-            " bg-green-500": Math.random() < 0.6,
-            "bg-orange-500": Math.random() >= 0.6 && Math.random() < 0.8,
-            "bg-red-500": Math.random() >= 0.8,
+          className={clsx("absolute left-3 top-4 h-2 w-2 rounded-full", {
+            "bg-green-500 filter drop-shadow-[0_0_4px_rgba(34,197,94,0.75)]":
+              Math.random() < 0.6,
+            "bg-orange-500 filter drop-shadow-[0_0_4px_rgba(249,115,22,0.75)]":
+              Math.random() >= 0.6 && Math.random() < 0.8,
+            "bg-red-500 filter drop-shadow-[0_0_4px_rgba(239,68,68,0.75)]":
+              Math.random() >= 0.8,
           })}
         ></div>
       </Card>
+      <CustomHandle type="source" position={Position.Bottom} id="a" />
     </>
   );
 }

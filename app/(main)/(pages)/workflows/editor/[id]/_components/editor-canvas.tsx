@@ -1,8 +1,9 @@
 "use client";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   addEdge,
   applyNodeChanges,
+  applyEdgeChanges,
   Background,
   Connection,
   Controls,
@@ -12,6 +13,7 @@ import {
   NodeChange,
   ReactFlow,
   ReactFlowInstance,
+  Node,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { EditorCanvasCardType, EditorNodeType } from "@/lib/types";
@@ -31,33 +33,24 @@ import EditorCanvasSidebar from "./editor-canvas-sidebar";
 type Props = {};
 
 const initialNodes: EditorNodeType[] = [];
+
 const initialEdges: { id: string; source: string; target: string }[] = [];
 
-export default function EditorCanvas({}: Props) {
+const EditorCanvas = (props: Props) => {
+  const { toast } = useToast();
   const { dispatch, state } = useEditor();
-  const [reactFlowInstance, setReactFlowInstance] =
-    useState<
-      ReactFlowInstance<
-        EditorNodeType,
-        { id: string; source: string; target: string }
-      >
-    >();
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
-  const [isWorkflowLoading, setIsWorkflowLoading] = useState<boolean>(false);
-  const pathName = usePathname();
+  const [isWorkFlowLoading, setIsWorkFlowLoading] = useState<boolean>(false);
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<
+      ReactFlowInstance<Node, { id: string; source: string; target: string }>
+    >();
+  const pathname = usePathname();
+
   const onDragOver = useCallback((event: any) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
-  }, []);
-
-  const onEdgesChange = useCallback((changes: EdgeChange[]) => {
-    //@ts-ignore
-    setEdges((eds) => applyEdgeChanges(changes, eds));
-  }, []);
-
-  const onConnect = useCallback((params: Edge | Connection) => {
-    setEdges((eds) => addEdge(params, eds));
   }, []);
 
   const onNodesChange = useCallback(
@@ -68,30 +61,25 @@ export default function EditorCanvas({}: Props) {
     [setNodes],
   );
 
-  const handleClickCanvas = useCallback(() => {
-    dispatch({
-      type: "SELECT_ELEMENT",
-      payload: {
-        element: {
-          data: {
-            completed: false,
-            current: false,
-            description: "",
-            metadata: {},
-            title: "",
-            type: "Trigger",
-          },
-          id: "",
-          position: {
-            x: 0,
-            y: 0,
-          },
-          type: "Trigger",
-        },
-      },
-    });
-  }, []);
-  const { toast } = useToast();
+  const onEdgesChange = useCallback(
+    (changes: EdgeChange[]) =>
+      //@ts-ignore
+      setEdges((eds) => applyEdgeChanges(changes, eds)),
+    [setEdges],
+  );
+  const onEdgeDoubleClick = useCallback(
+    (event: React.MouseEvent, edge: Edge) => {
+      event.preventDefault();
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    },
+    [],
+  );
+
+  const onConnect = useCallback(
+    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
+    [],
+  );
+
   const onDrop = useCallback(
     (event: any) => {
       event.preventDefault();
@@ -112,7 +100,8 @@ export default function EditorCanvas({}: Props) {
       if (type === "Trigger" && triggerAlreadyExists) {
         toast({
           title: "Trigger already exists",
-          description: "You can only have one trigger in a workflow",
+          description:
+            "Only one trigger can be added to automations at the moment",
         });
         return;
       }
@@ -144,10 +133,37 @@ export default function EditorCanvas({}: Props) {
     },
     [reactFlowInstance, state],
   );
+
+  const handleClickCanvas = () => {
+    dispatch({
+      type: "SELECT_ELEMENT",
+      payload: {
+        element: {
+          data: {
+            completed: false,
+            current: false,
+            description: "",
+            metadata: {},
+            title: "",
+            type: "Trigger",
+          },
+          id: "",
+          position: { x: 0, y: 0 },
+          type: "Trigger",
+        },
+      },
+    });
+  };
+
+  useEffect(() => {
+    dispatch({ type: "LOAD_DATA", payload: { edges, elements: nodes } });
+  }, [nodes, edges]);
+
   const nodeTypes = useMemo(
     () => ({
       Action: EditorCanvasCardSingle,
       Trigger: EditorCanvasCardSingle,
+      Email: EditorCanvasCardSingle,
       Condition: EditorCanvasCardSingle,
       AI: EditorCanvasCardSingle,
       Slack: EditorCanvasCardSingle,
@@ -155,21 +171,36 @@ export default function EditorCanvas({}: Props) {
       Notion: EditorCanvasCardSingle,
       Discord: EditorCanvasCardSingle,
       "Custom Webhook": EditorCanvasCardSingle,
-      "Google Calender": EditorCanvasCardSingle,
+      "Google Calendar": EditorCanvasCardSingle,
       Wait: EditorCanvasCardSingle,
     }),
     [],
   );
 
+  // const onGetWorkFlow = async () => {
+  //   setIsWorkFlowLoading(true)
+  //   const response = await onGetNodesEdges(pathname.split('/').pop()!)
+  //   if (response) {
+  //     setEdges(JSON.parse(response.edges!))
+  //     setNodes(JSON.parse(response.nodes!))
+  //     setIsWorkFlowLoading(false)
+  //   }
+  //   setIsWorkFlowLoading(false)
+  // }
+
+  // useEffect(() => {
+  //   onGetWorkFlow()
+  // }, [])
+
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={70}>
-        <div className=" flex h-full items-center justify-center">
+        <div className="flex h-full items-center justify-center">
           <div
             style={{ width: "100%", height: "100%", paddingBottom: "70px" }}
             className="relative"
           >
-            {isWorkflowLoading ? (
+            {isWorkFlowLoading ? (
               <div className="absolute flex h-full w-full items-center justify-center">
                 <svg
                   aria-hidden="true"
@@ -200,6 +231,7 @@ export default function EditorCanvas({}: Props) {
                 onConnect={onConnect}
                 onInit={setReactFlowInstance}
                 fitView
+                onEdgeDoubleClick={onEdgeDoubleClick}
                 onClick={handleClickCanvas}
                 nodeTypes={nodeTypes}
               >
@@ -213,7 +245,7 @@ export default function EditorCanvas({}: Props) {
                 <Background
                   //@ts-ignore
                   variant="dots"
-                  gap={12}
+                  gap={20}
                   size={1}
                 />
               </ReactFlow>
@@ -222,8 +254,8 @@ export default function EditorCanvas({}: Props) {
         </div>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSize={40} className=" relative sm:block">
-        {isWorkflowLoading ? (
+      <ResizablePanel defaultSize={40} className="relative sm:block">
+        {isWorkFlowLoading ? (
           <div className="absolute flex h-full w-full items-center justify-center">
             <svg
               aria-hidden="true"
@@ -250,4 +282,6 @@ export default function EditorCanvas({}: Props) {
       </ResizablePanel>
     </ResizablePanelGroup>
   );
-}
+};
+
+export default EditorCanvas;
