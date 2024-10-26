@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,7 +18,7 @@ type Props = {
   title: ConnectionType;
   description: string;
   callback?: () => void;
-  //   connected: {} & any;
+  connected: {} & any;
 };
 
 export const ConnectionCard = ({
@@ -26,12 +27,12 @@ export const ConnectionCard = ({
   title,
   description,
   callback,
-  //   connected,
+  connected,
 }: Props) => {
   return (
-    <Card className=" flex w-full item-center justify-between">
-      <CardHeader className=" flex flex-col gap-4">
-        <div className=" flex flex-col gap-2">
+    <Card className=" flex flex-col lg:flex-row items-center lg:justify-between">
+      <CardHeader className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <Image
             src={icon}
             alt={title}
@@ -43,31 +44,33 @@ export const ConnectionCard = ({
         <CardTitle className="text-lg">{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <div className=" flex flex-col items-center gap-2 p-4">
-        {/* {connected[type] ? (
-          <>
-            {" "}
-            <Button>Connected</Button>{" "}
-          </>
+      <CardFooter className=" flex flex-col justify-center items-center p-4">
+        {connected[type] ? (
+          <Button size={"lg"} className="" variant={"outline"}>
+            <span className="relative flex h-2 w-2 mr-3">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 blur-sm"></span>
+              <span className="absolute inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span>Connected</span>
+          </Button>
         ) : (
-          <> */}
-        <Link
-          className=" my-auto"
-          href={
-            title == "Discord"
-              ? process.env.NEXT_PUBLIC_DISCORD_REDIRECT!
-              : title == "Notion"
-                ? process.env.NEXT_PUBLIC_NOTION_AUTH_URL!
-                : title == "Slack"
-                  ? process.env.NEXT_PUBLIC_SLACK_REDIRECT!
-                  : "#"
-          }
-        >
-          <Button>Connect</Button>
-        </Link>{" "}
-        {/* </>
-        )} */}
-      </div>
+          <Link
+            href={
+              title == "Discord"
+                ? process.env.NEXT_PUBLIC_DISCORD_REDIRECT!
+                : title == "Notion"
+                  ? process.env.NEXT_PUBLIC_NOTION_AUTH_URL!
+                  : title == "Slack"
+                    ? process.env.NEXT_PUBLIC_SLACK_REDIRECT!
+                    : "#"
+            }
+          >
+            <Button className="" size={"lg"}>
+              <span>Connect</span>
+            </Button>
+          </Link>
+        )}
+      </CardFooter>
     </Card>
   );
 };

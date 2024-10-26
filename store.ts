@@ -13,16 +13,16 @@ type Store = {
   setGoogleFile: (googleFile: any) => void;
   slackChannels: Option[];
   setSlackChannels: (slackChannels: Option[]) => void;
-  selectedSlackChannel: Option[];
-  setSelectedSlackChannel: (selectedSlackChannel: Option[]) => void;
+  selectedSlackChannels: Option[];
+  setSelectedSlackChannels: (selectedSlackChannel: Option[]) => void;
 };
 
 export const useRunnerStore = create<Store>((set) => ({
-  googleFile: null,
-  setGoogleFile: (googleFile) => set({ googleFile }),
+  googleFile: {},
+  setGoogleFile: (googleFile: any) => set({ googleFile }),
   slackChannels: [],
-  setSlackChannels: (slackChannels) => set({ slackChannels }),
-  selectedSlackChannel: [],
-  setSelectedSlackChannel: (selectedSlackChannel) =>
-    set({ selectedSlackChannel }),
+  setSlackChannels: (slackChannels: Option[]) => set({ slackChannels }),
+  selectedSlackChannels: [],
+  setSelectedSlackChannels: (selectedSlackChannels: Option[]) =>
+    set({ selectedSlackChannels }),
 }));

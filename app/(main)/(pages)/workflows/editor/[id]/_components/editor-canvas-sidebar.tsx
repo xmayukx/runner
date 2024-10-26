@@ -11,7 +11,7 @@ import { CONNECTIONS, EditorCanvasDefaultCardTypes } from "@/lib/constants";
 import { EditorCanvasTypes, EditorNodeType } from "@/lib/types";
 import { useNodeConnections } from "@/providers/connection-provider";
 import { useEditor } from "@/providers/editor-provider";
-import React from "react";
+import React, { useEffect } from "react";
 import EditorCanvasIconHelper from "./editor-canvas-card-icon-helper";
 import { onDragStart } from "@/lib/editor-utils";
 import {
@@ -21,6 +21,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import RenderConnectionAccordion from "./render-connection-accordion";
+import RenderOutputAccordion from "./render-output-accordion";
+import { useRunnerStore } from "@/store";
 
 type Props = {
   nodes: EditorNodeType[];
@@ -30,6 +32,12 @@ export default function EditorCanvasSidebar({ nodes }: Props) {
   // WIP: Connect DB to Editor
   const { state } = useEditor();
   const { nodeConnection } = useNodeConnections();
+  const { googleFile, setSlackChannels } = useRunnerStore();
+
+  useEffect(() => {
+    if (state) {
+    }
+  }, [state]);
   return (
     <aside>
       <Tabs
@@ -73,18 +81,30 @@ export default function EditorCanvasSidebar({ nodes }: Props) {
             {state.editor.selectedNode.data.title}
           </div>
           <Accordion type="multiple">
-            <AccordionItem value="Options" className=" border-y-[1px] px-2">
+            <AccordionItem value="item-1" className=" border-y-[1px] px-2">
               <AccordionTrigger className=" !no-underline">
                 Accounts
               </AccordionTrigger>
               <AccordionContent>
                 {CONNECTIONS.map((connection) => (
-                  <RenderConnectionAccordion
-                    key={connection.title}
-                    connection={connection}
-                    state={state}
-                  />
+                  <div key={connection.title}>
+                    <RenderConnectionAccordion
+                      connection={connection}
+                      state={state}
+                    />
+                  </div>
                 ))}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2" className=" border-y-[1px] px-2">
+              <AccordionTrigger className=" !no-underline">
+                Actions
+              </AccordionTrigger>
+              <AccordionContent>
+                <RenderOutputAccordion
+                  state={state}
+                  nodeConnection={nodeConnection}
+                />
               </AccordionContent>
             </AccordionItem>
           </Accordion>
