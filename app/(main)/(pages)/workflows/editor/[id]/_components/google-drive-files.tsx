@@ -7,7 +7,8 @@ import { getGoogleListener } from "../../../_actions/workflow-connections";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 type Props = {};
-function GoogleDriveFiles({}: Props) {
+
+const GoogleDriveFiles = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
 
@@ -16,13 +17,12 @@ function GoogleDriveFiles({}: Props) {
     const response = await axios.get("/api/drive-activity");
     if (response) {
       toast({
-        title: "Google Drive Files",
-        description: "Google Drive Files fetched successfully",
+        title: "Listener Created",
+        description: "Google Drive listener has been created successfully",
       });
       setLoading(false);
       setIsListening(true);
     }
-    setIsListening(false);
   };
 
   const onListener = async () => {
@@ -30,7 +30,6 @@ function GoogleDriveFiles({}: Props) {
     if (listener?.googleResourceId !== null) {
       setIsListening(true);
     }
-    setIsListening(false);
   };
 
   useEffect(() => {
@@ -38,16 +37,16 @@ function GoogleDriveFiles({}: Props) {
   }, []);
 
   return (
-    <div className=" flex flex-col gap-3 pb-6">
+    <div className="flex flex-col gap-3 pb-6">
       {isListening ? (
-        <Card className=" py-3">
-          <CardContent>
-            <CardDescription>Listening...</CardDescription>
-          </CardContent>
+        <Card className="py-3">
+          <CardDescription className=" text-center">
+            Listening...
+          </CardDescription>
         </Card>
       ) : (
         <Button
-          variant={"outline"}
+          variant="outline"
           {...(!loading && {
             onClick: reqGoogle,
           })}
@@ -78,6 +77,6 @@ function GoogleDriveFiles({}: Props) {
       )}
     </div>
   );
-}
+};
 
 export default GoogleDriveFiles;

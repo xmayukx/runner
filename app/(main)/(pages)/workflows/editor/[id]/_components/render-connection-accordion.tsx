@@ -2,7 +2,7 @@
 import { Connection } from "@/lib/types";
 import { useNodeConnections } from "@/providers/connection-provider";
 import { EditorState } from "@/providers/editor-provider";
-import { useRunnerStore } from "@/store";
+import { useRunnerStore } from "@/store/store";
 import React from "react";
 import { ConnectionCard } from "@/app/(main)/(pages)/connections/_components/connection-card";
 import { AccordionContent } from "@/components/ui/accordion";

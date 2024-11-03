@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { onContentChange } from "@/lib/editor-utils";
 import { ConnectionProviderProps } from "@/providers/connection-provider";
 import { EditorState } from "@/providers/editor-provider";
-import { Option } from "@/store";
+import { Option } from "@/store/store";
 import React from "react";
 import GoogleFileDetails from "./google-file-details";
 import { nodeMapper } from "@/lib/types";

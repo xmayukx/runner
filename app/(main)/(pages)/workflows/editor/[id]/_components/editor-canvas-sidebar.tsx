@@ -13,7 +13,11 @@ import { useNodeConnections } from "@/providers/connection-provider";
 import { useEditor } from "@/providers/editor-provider";
 import React, { useEffect } from "react";
 import EditorCanvasIconHelper from "./editor-canvas-card-icon-helper";
-import { onDragStart } from "@/lib/editor-utils";
+import {
+  fetchBotSlackChannels,
+  onConnections,
+  onDragStart,
+} from "@/lib/editor-utils";
 import {
   Accordion,
   AccordionContent,
@@ -22,7 +26,7 @@ import {
 } from "@/components/ui/accordion";
 import RenderConnectionAccordion from "./render-connection-accordion";
 import RenderOutputAccordion from "./render-output-accordion";
-import { useRunnerStore } from "@/store";
+import { useRunnerStore } from "@/store/store";
 
 type Props = {
   nodes: EditorNodeType[];
@@ -36,8 +40,18 @@ export default function EditorCanvasSidebar({ nodes }: Props) {
 
   useEffect(() => {
     if (state) {
+      onConnections(nodeConnection, state, googleFile);
     }
   }, [state]);
+
+  useEffect(() => {
+    if (nodeConnection.slackNode.slackAccessToken) {
+      fetchBotSlackChannels(
+        nodeConnection.slackNode.slackAccessToken,
+        setSlackChannels,
+      );
+    }
+  }, [nodeConnection]);
   return (
     <aside>
       <Tabs

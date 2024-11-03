@@ -1,6 +1,6 @@
 import { ConnectionProviderProps } from "@/providers/connection-provider";
 import { EditorState } from "@/providers/editor-provider";
-import { useRunnerStore } from "@/store";
+import { useRunnerStore } from "@/store/store";
 import React from "react";
 import ContentBasedTitle from "./content-based-title";
 

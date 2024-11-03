@@ -23,12 +23,16 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { toast } from "@/hooks/use-toast";
+import { onCreateWorkflow } from "@/app/(main)/(pages)/workflows/_actions/workflow-connections";
+import { useModal } from "@/providers/modal-provider";
 type Props = {
   title?: string;
   subTitle?: string;
 };
 
 export default function WorkflowForm({ subTitle, title }: Props) {
+  const { setClose } = useModal();
   const form = useForm<z.infer<typeof WorkflowSchema>>({
     mode: "onChange",
     resolver: zodResolver(WorkflowSchema),
@@ -41,7 +45,19 @@ export default function WorkflowForm({ subTitle, title }: Props) {
   const isLoading = form.formState.isLoading;
   const router = useRouter();
 
-  const handleSubmit = async (value: z.infer<typeof WorkflowSchema>) => {};
+  const handleSubmit = async (value: z.infer<typeof WorkflowSchema>) => {
+    const workflow = await onCreateWorkflow(value.name, value.description);
+
+    console.log(workflow);
+    if (workflow) {
+      toast({
+        title: `Workflow ${value.name} created`,
+        description: "Workflow has been created successfully",
+      });
+      router.refresh();
+    }
+    setClose();
+  };
 
   return (
     <Card className=" w-full max-w-[650px] border-none">

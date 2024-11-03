@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/lib/db";
-import { Option } from "@/store";
-import { auth } from "@clerk/nextjs/server";
+import { Option } from "@/store/store";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export const getGoogleListener = async () => {
   const { userId } = auth();
@@ -117,4 +117,48 @@ export const onCreateNodeTemplate = async (
 
     if (response) return "Notion template saved";
   }
+};
+
+export const onGetWorkflows = async () => {
+  const user = await currentUser();
+
+  if (user) {
+    const workflows = await db.workflows.findMany({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (workflows) return workflows;
+  }
+};
+
+export const onCreateWorkflow = async (name: string, description: string) => {
+  const user = await currentUser();
+
+  if (user) {
+    const workflow = await db.workflows.create({
+      data: {
+        userId: user.id,
+        name,
+        description,
+      },
+    });
+
+    if (workflow) return { message: "workflow created" };
+    return { message: "workflow not created" };
+  }
+};
+
+export const onGetNodesEdges = async (flowId: string) => {
+  const nodesEdges = await db.workflows.findUnique({
+    where: {
+      id: flowId,
+    },
+    select: {
+      nodes: true,
+      edges: true,
+    },
+  });
+  if (nodesEdges?.nodes && nodesEdges?.edges) return nodesEdges;
 };

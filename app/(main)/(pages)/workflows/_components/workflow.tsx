@@ -1,3 +1,4 @@
+"use client";
 import {
   Card,
   CardDescription,
@@ -9,6 +10,8 @@ import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { onFlowPublish } from "../editor/[id]/_actions/workflow-connections";
+import { toast } from "@/hooks/use-toast";
 
 type Props = {
   name: string;
@@ -18,6 +21,18 @@ type Props = {
 };
 
 export default function Workflow({ name, id, description, publish }: Props) {
+  const onPublishFlow = async (event: any) => {
+    const response = await onFlowPublish(
+      id,
+      event.target.ariaChecked === "false",
+    );
+    if (response)
+      toast({
+        title: "Scheduled: Catch up",
+        description: "Friday, February 10, 2023 at 5:57 PM",
+      });
+  };
+
   return (
     <Card className=" flex w-full items-center justify-between">
       <CardHeader className=" flex flex-col gap-4">
@@ -53,12 +68,12 @@ export default function Workflow({ name, id, description, publish }: Props) {
       </CardHeader>
       <div className=" flex flex-col item-center gap-2 p-4">
         <Label htmlFor="airplane-mode" className=" text-muted-foreground">
-          On
+          {publish! ? "On" : "Off"}
         </Label>
         <Switch
           id="airplane-mode"
-          // onClick={onPublishFlow}
-          // defaultChecked={publish}
+          onClick={onPublishFlow}
+          defaultChecked={publish!}
         ></Switch>
       </div>
     </Card>

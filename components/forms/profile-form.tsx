@@ -35,7 +35,7 @@ function ProfileForm({ user, onUpdate }: props) {
 
   const handleSubmit = async (value: z.infer<typeof EditUserProfileSchema>) => {
     setIsLoading(true);
-    await onUpdate(value);
+    await onUpdate(value.name);
     setIsLoading(false);
   };
 

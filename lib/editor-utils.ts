@@ -6,6 +6,12 @@ import {
   getNotionConnection,
   getNotionDatabase,
 } from "@/app/(main)/(pages)/connections/_actions/notion-connection";
+import {
+  getSlackConnection,
+  listBotChannels,
+} from "@/app/(main)/(pages)/connections/_actions/slack-connection";
+import { auth } from "@clerk/nextjs/server";
+import { Option } from "@/store/store";
 
 export const onDragStart = (
   event: any,
@@ -118,4 +124,28 @@ export const onConnections = async (
       );
     }
   }
+
+  if (editorState.editor.selectedNode.data.title == "Slack") {
+    const connection = await getSlackConnection();
+    if (connection) {
+      nodeConnection.setSlackNode({
+        appId: connection.appId,
+        authedUserId: connection.authedUserId,
+        authedUserToken: connection.authedUserToken,
+        slackAccessToken: connection.slackAccessToken,
+        botUserId: connection.botUserId,
+        teamId: connection.teamId,
+        teamName: connection.teamName,
+        userId: connection.userId,
+        content: "",
+      });
+    }
+  }
+};
+
+export const fetchBotSlackChannels = async (
+  token: string,
+  setSlackChannels: (slackChannels: Option[]) => void,
+) => {
+  await listBotChannels(token)?.then((channels) => setSlackChannels(channels));
 };
