@@ -1,3 +1,4 @@
+"use client";
 import { AccordionContent } from "@/components/ui/accordion";
 import {
   Card,
@@ -11,11 +12,14 @@ import { onContentChange } from "@/lib/editor-utils";
 import { ConnectionProviderProps } from "@/providers/connection-provider";
 import { EditorState } from "@/providers/editor-provider";
 import { Option } from "@/store/store";
-import React from "react";
+import React, { useEffect } from "react";
 import GoogleFileDetails from "./google-file-details";
 import { nodeMapper } from "@/lib/types";
 import GoogleDriveFiles from "./google-drive-files";
 import ActionButton from "./action-button";
+import { getFileMetaData } from "@/app/(main)/(pages)/connections/_actions/google-connection";
+import axios from "axios";
+import { toast } from "@/hooks/use-toast";
 interface GroupOption {
   [key: string]: Option[];
 }
@@ -39,6 +43,31 @@ function ContentBasedTitle({
 }: Props) {
   const { selectedNode } = newState.editor;
   const title = selectedNode.data.title;
+
+  useEffect(() => {
+    const reqGoogle = async () => {
+      try {
+        const response: { data: { message: { files: any } } } =
+          await axios.get("/api/drive");
+        if (response) {
+          toast({
+            description: "Files fetched successfully",
+          });
+          console.log(response.data.message);
+          setFile(response.data.message.files[0]);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          toast({
+            description: error.message,
+          });
+        }
+      }
+    };
+
+    reqGoogle();
+  }, []);
 
   //@ts-expect-error
   const nodeConnectionType: any = nodeConnection[nodeMapper[title]];

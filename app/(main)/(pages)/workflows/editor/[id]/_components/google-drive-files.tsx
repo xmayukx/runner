@@ -1,11 +1,11 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "@/hooks/use-toast";
 import { getGoogleListener } from "../../../_actions/workflow-connections";
-import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardDescription } from "@/components/ui/card";
+import { toast } from "@/hooks/use-toast";
+
 type Props = {};
 
 const GoogleDriveFiles = (props: Props) => {
@@ -18,11 +18,12 @@ const GoogleDriveFiles = (props: Props) => {
     if (response) {
       toast({
         title: "Listener Created",
-        description: "Google Drive listener has been created successfully",
+        description: "Listening to Google Drive changes",
       });
       setLoading(false);
       setIsListening(true);
     }
+    setIsListening(false);
   };
 
   const onListener = async () => {
