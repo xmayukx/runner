@@ -5,6 +5,7 @@ import { bric, clashDisplay } from "@/lib/fonts";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Toaster2 } from "@/components/ui/sonner";
+import { BillingProvider } from "@/providers/billing-provider";
 
 export const metadata: Metadata = {
   title: "Runner - Automation Tool",
@@ -28,9 +29,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Toaster />
-            <Toaster2 />
-            {children}
+            <BillingProvider>
+              <Toaster />
+              <Toaster2 />
+              {children}
+            </BillingProvider>
           </ThemeProvider>
         </body>
       </html>

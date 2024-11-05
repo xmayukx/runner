@@ -1,6 +1,7 @@
 import React from "react";
 import Workflow from "./workflow";
 import { onGetWorkflows } from "../_actions/workflow-connections";
+import { MoreCredits } from "./more-credits";
 
 type Props = {};
 
@@ -10,6 +11,7 @@ export default async function Workflows({}: Props) {
     <div className="relative flex flex-col gap-4">
       <section className=" flex flex-col m-2">
         <div className="flex flex-col gap-4">
+          <MoreCredits />
           {workflows?.length ? (
             workflows.map((workflow, key) => (
               <Workflow key={key} {...workflow} />

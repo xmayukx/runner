@@ -16,7 +16,7 @@ async function Page(props: Props) {
   };
 
   if (session_id) {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    const stripe = new Stripe(process.env.STRIPE_SECRET!, {
       typescript: true,
       apiVersion: "2024-10-28.acacia",
     });

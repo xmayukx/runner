@@ -50,6 +50,8 @@ export const onContentChange = (
     onSlackContent(nodeConnection, event);
   } else if (nodeType === "Discord") {
     onDiscordContent(nodeConnection, event);
+  } else if (nodeType === "Notion") {
+    onNotionContent(nodeConnection, event);
   }
 };
 
@@ -148,4 +150,14 @@ export const fetchBotSlackChannels = async (
   setSlackChannels: (slackChannels: Option[]) => void,
 ) => {
   await listBotChannels(token)?.then((channels) => setSlackChannels(channels));
+};
+
+export const onNotionContent = (
+  nodeConnection: ConnectionProviderProps,
+  event: React.ChangeEvent<HTMLInputElement>,
+) => {
+  nodeConnection.setNotionNode((prev: any) => ({
+    ...prev,
+    content: event.target.value,
+  }));
 };
