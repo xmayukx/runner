@@ -9,18 +9,18 @@ export const getFileMetaData = async () => {
     process.env.OAUTH2_REDIRECT_URI,
   );
 
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return { message: "User not found" };
   }
 
-  const clerkResponse = await clerkClient.users.getUserOauthAccessToken(
+  const clerkResponse = (await clerkClient()).users.getUserOauthAccessToken(
     userId,
     "oauth_google",
   );
 
-  const accessToken = clerkResponse.data[0].token;
+  const accessToken = (await clerkResponse).data[0].token;
 
   oauth2Client.setCredentials({
     access_token: accessToken,
@@ -33,3 +33,31 @@ export const getFileMetaData = async () => {
     return response.data;
   }
 };
+
+async function fetchAllFoldersInMyDrive(oauth2Client: any) {
+  const drive = google.drive({ version: "v3", auth: oauth2Client });
+  const folders = [];
+  let pageToken: string | null | undefined = null;
+
+  try {
+    do {
+      // Fetch folders in the root "My Drive" with pagination
+      const res: any = await drive.files.list({
+        q: "mimeType='application/vnd.google-apps.folder' and 'root' in parents",
+        fields: "nextPageToken, files(id, name)",
+        spaces: "drive",
+        pageToken: pageToken || undefined,
+      });
+
+      if (res.data.files) {
+        folders.push(...res.data.files);
+      }
+      pageToken = res.data.nextPageToken;
+    } while (pageToken);
+
+    return folders;
+  } catch (error) {
+    console.error("Error fetching folders:", error);
+    throw new Error("Failed to retrieve folders.");
+  }
+}

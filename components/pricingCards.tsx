@@ -47,11 +47,6 @@ function PricingCards({ title, price, features }: PricingPlan) {
           ))}
         </ul>
       </CardContent>
-      <CardFooter className=" flex justify-end">
-        <Button className=" rounded-full px-5 py-4 text-pretty">
-          Purchase
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

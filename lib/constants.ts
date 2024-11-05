@@ -26,23 +26,31 @@ export type PricingPlan = {
 
 export const pricing: PricingPlan[] = [
   {
-    title: "Basic",
-    price: "$9.99",
+    title: "Free",
+    price: "$0",
     features: [
       {
-        name: "Unlimited Projects",
+        name: "Monthly Credits for Automation",
         disabled: false,
       },
       {
-        name: "Unlimited Storage",
+        name: "Drive Activity Monitoring",
         disabled: false,
       },
       {
-        name: "Priority Support",
+        name: "Notifications to Discord",
+        disabled: false,
+      },
+      {
+        name: "Notifications to Notion and Slack",
         disabled: true,
       },
       {
-        name: "Unlimited Users",
+        name: "Basic Support",
+        disabled: false,
+      },
+      {
+        name: "Limited Integrations",
         disabled: false,
       },
     ],
@@ -52,11 +60,15 @@ export const pricing: PricingPlan[] = [
     price: "$19.99",
     features: [
       {
-        name: "Unlimited Projects",
+        name: "Monthly Credits for Automation",
         disabled: false,
       },
       {
-        name: "Unlimited Storage",
+        name: "Advanced Drive Activity Monitoring",
+        disabled: false,
+      },
+      {
+        name: "Notifications to Discord, Notion, Slack, and More",
         disabled: false,
       },
       {
@@ -64,7 +76,11 @@ export const pricing: PricingPlan[] = [
         disabled: false,
       },
       {
-        name: "Unlimited Users",
+        name: "Unlimited Integrations",
+        disabled: false,
+      },
+      {
+        name: "Custom Notification Settings",
         disabled: false,
       },
     ],
@@ -96,16 +112,6 @@ export const menuOptions = [
     name: "Billing",
     Component: React.createElement(MdOutlinePayment),
     href: "/billing",
-  },
-  {
-    name: "Templates",
-    Component: React.createElement(HiTemplate),
-    href: "/templates",
-  },
-  {
-    name: "Logs",
-    Component: React.createElement(IoDocumentText),
-    href: "/logs",
   },
 ];
 

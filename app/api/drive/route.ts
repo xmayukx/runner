@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth, getAuth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -16,7 +16,7 @@ export async function GET() {
   );
 
   // Authenticate the user with Clerk
-  const { userId } = auth();
+  const { userId, sessionId, sessionClaims } = await auth();
   if (!userId) {
     console.error("❌ User not found");
     return NextResponse.json({ message: "User not found" });
@@ -26,13 +26,12 @@ export async function GET() {
   try {
     // Get OAuth access token from Clerk for Google integration
     console.log("🔑 Retrieving OAuth access token from Clerk...");
+    const clerkResponse = await (
+      await ctx
+    ).users.getUserOauthAccessToken(userId, "oauth_google");
 
-    const clerkResponse = await ctx.users.getUserOauthAccessToken(
-      userId,
-      "oauth_google",
-    );
-    const accessToken = clerkResponse?.data?.[0]?.token;
-
+    const accessToken = clerkResponse.data[0].token;
+    console.log("🔑 Access token:", accessToken);
     if (!accessToken) {
       console.error("❌ No access token found for user");
       return NextResponse.json({ message: "Access token not found" });
@@ -40,7 +39,6 @@ export async function GET() {
     console.log("✅ Successfully retrieved access token from Clerk");
     oauth2Client.setCredentials({
       access_token: accessToken,
-      refresh_token: "",
     });
 
     // Initialize Google Drive client

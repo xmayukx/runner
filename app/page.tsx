@@ -2,6 +2,7 @@ import { ContainerScroll } from "@/components/global/container-scroll-animation"
 import { InfiniteMovingCards } from "@/components/global/infinite-moving-cards";
 import { Navbar } from "@/components/global/navbar";
 import PricingCards from "@/components/pricingCards";
+import AnimatedShinyText from "@/components/ui/animated-shiny-text";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +13,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { clients, pricing } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
+import PricingSeciton from "./_components/pricing-section";
 
 export default function Home() {
   return (
@@ -24,14 +28,17 @@ export default function Home() {
           <ContainerScroll
             titleComponent={
               <div className="flex items-center flex-col">
-                <Button
-                  size={"lg"}
-                  className="p-8 mb-8 md:mb-0 text-2xl w-full sm:w-fit border-t-2 border-r-2 border-solid rounded-full border-[#4D4D4D] bg-[#1F1F1F] hover:bg-white group transition-all flex items-center justify-center gap-4 hover:shadow-lg hover:shadow-neutral-600 duration-500"
-                >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-600  md:text-center group-hover:bg-gradient-to-r group-hover:from-black goup-hover:to-black">
-                    Start For Free Today
-                  </span>
-                </Button>
+                <div className="z-10 flex mb-10 items-center justify-center">
+                  <div
+                    className={cn(
+                      "group rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800",
+                    )}
+                  >
+                    <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
+                      <span> Introducing Runner</span>
+                    </AnimatedShinyText>
+                  </div>
+                </div>
                 <h1 className=" text-5xl md:text-8xl font-clashDisplay bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-600 font-bold tracking-tight">
                   Automate Your Work With Runner
                 </h1>
@@ -68,14 +75,7 @@ export default function Home() {
 
           {/* Cards */}
           <div className="lg:flex lg:space-x-5 lg:mx-[15%] md:mx-[20%] mx-[15%] gap-y-2">
-            {pricing.map((price, key) => (
-              <PricingCards
-                key={key}
-                title={price.title}
-                price={price.price}
-                features={price.features}
-              />
-            ))}
+            <PricingSeciton />
           </div>
         </div>
       </section>

@@ -33,34 +33,8 @@ function InfoBar() {
           {credits}/{tier == "Free" ? "10" : tier == "Pro" && "100"}
         </span>
       </span>
-      <span className=" flex items-center bg-muted px-4 rounded-full">
-        <Search />
-        <Input
-          placeholder="Quick Search"
-          className=" border-none bg-transparent"
-        />
-      </span>
-      <TooltipProvider>
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger>
-            <Headphones />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="">Contact Support</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger>
-            <Book />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="">Guide</p>
-          </TooltipContent>
-          <UserButton />
-        </Tooltip>
-      </TooltipProvider>
+
+      <UserButton />
     </div>
   );
 }
