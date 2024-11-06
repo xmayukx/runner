@@ -52,7 +52,7 @@ function ProfileForm({ user, onUpdate }: props) {
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormField
-          disabled={isLoading}
+          disabled={true}
           control={form.control}
           name="name"
           render={({ field }) => (
@@ -80,7 +80,7 @@ function ProfileForm({ user, onUpdate }: props) {
           )}
         />
 
-        <Button className=" self-start ">
+        {/* <Button className=" self-start ">
           {isLoading ? (
             <>
               <Loader2 className=" mr-2 w-4 h-4 animate-spin" />
@@ -89,7 +89,7 @@ function ProfileForm({ user, onUpdate }: props) {
           ) : (
             "Save User Settings"
           )}
-        </Button>
+        </Button> */}
       </form>
     </Form>
   );

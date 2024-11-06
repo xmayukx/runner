@@ -88,20 +88,20 @@ export const pricing: PricingPlan[] = [
 ];
 
 export const menuOptions = [
-  {
-    name: "Dashboard",
-    Component: React.createElement(GoHomeFill),
-    href: "/dashboard",
-  },
+  // {
+  //   name: "Dashboard",
+  //   Component: React.createElement(GoHomeFill),
+  //   href: "/dashboard",
+  // },
   {
     name: "Workflows",
     Component: React.createElement(LuWorkflow),
     href: "/workflows",
   },
   {
-    name: "Settings",
+    name: "Account",
     Component: React.createElement(RiSettings4Fill),
-    href: "/settings",
+    href: "/account",
   },
   {
     name: "Connections",

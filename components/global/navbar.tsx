@@ -14,20 +14,24 @@ export const Navbar = async (props: Props) => {
   return (
     <header className="fixed right-0 left-0 top-0 py-4 px-4 bg-black/40 backdrop-blur-lg z-[100] flex items-center justify-between">
       <aside className=" flex items-center gap-[2px]">
-        {/* <Image 
-        width={15}
-        height={15}
-        src={""}
-        alt="runner logo"
-        className=" shadow-sm" /> */}
-        <h1 className="text-2xl font-bold text-white">Runner</h1>
+        <Image
+          width={15}
+          height={15}
+          src={"/runner-logo.svg"}
+          alt="runner logo"
+          className="invert size-7"
+        />
+        <h1 className="text-xl font-medium text-white ml-2">Runner</h1>
       </aside>
 
       <aside className="flex items-center gap-4">
-        <Link href="/dashboard">
-          <Button variant={"ghost"} className="group flex items-center">
+        <Link href="/workflows">
+          <Button
+            variant={"ghost"}
+            className="group flex items-center rounded-3xl"
+          >
             {/* Display either "Dashboard" or "Get Started" based on user state */}
-            {user ? "Dashboard" : "Get Started"}
+            {user ? "Launch" : "Get Started"}
 
             {/* Arrow icon with hover animation */}
             <ArrowRightIcon className="ml-2 transition-transform duration-300 transform group-hover:translate-x-1 size-3" />

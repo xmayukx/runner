@@ -3,7 +3,7 @@ import { EditorNode } from "@/providers/editor-provider";
 import { z } from "zod";
 
 export const EditUserProfileSchema = z.object({
-  email: z.string().email("Required"),
+  email: z.string().optional(),
   name: z.string().min(3, "Required"),
 });
 
