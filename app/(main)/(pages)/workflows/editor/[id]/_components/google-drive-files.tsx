@@ -14,28 +14,36 @@ const GoogleDriveFiles = (props: Props) => {
 
   const reqGoogle = async () => {
     setLoading(true);
-    const response = await axios.get("/api/drive-activity");
-    if (response) {
+    try {
+      await axios.get("/api/drive-activity");
       toast({
         title: "Listener Created",
         description: "Listening to Google Drive changes",
       });
       setLoading(false);
       setIsListening(true);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: error.message,
+        });
+
+        setLoading(false);
+      }
     }
-    setIsListening(false);
   };
 
-  const onListener = async () => {
-    const listener = await getGoogleListener();
-    if (listener?.googleResourceId !== null) {
-      setIsListening(true);
-    }
-  };
+  // const onListener = async () => {
+  //   const listener = await getGoogleListener();
+  //   if (listener?.googleResourceId !== null) {
+  //     setIsListening(true);
+  //   }
+  // };
 
-  useEffect(() => {
-    onListener();
-  }, []);
+  // useEffect(() => {
+  //   onListener();
+  // }, []);
 
   return (
     <div className="flex flex-col gap-3 pb-6">
