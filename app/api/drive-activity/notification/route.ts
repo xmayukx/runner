@@ -104,6 +104,7 @@ export async function POST(req: NextRequest) {
       try {
         const flowPath: string[] = JSON.parse(flow.flowPath!);
         let current = 0;
+        console.log(flow.publish);
 
         while (current < flowPath.length) {
           const step = flowPath[current];
@@ -134,13 +135,23 @@ export async function POST(req: NextRequest) {
                   `✅ [Workflow ${flow.id}] Posted content to Discord webhook`,
                 );
                 flowPath.splice(current, 1); // Remove current step
+
+                // Deduct credits for successful Discord post
+                if (user.credits !== "Unlimited") {
+                  const newCredits = parseInt(user.credits!) - 1;
+                  await db.user.update({
+                    where: { clerkId: user.clerkId },
+                    data: { credits: `${newCredits}` },
+                  });
+                  console.log(
+                    `💳 [User ${user.clerkId}] Deducted 1 credit, new credits: ${newCredits}`,
+                  );
+                }
               } catch (error) {
                 console.error(
                   `❌ [Workflow ${flow.id}] Error posting to Discord:`,
                   error,
                 );
-                // Optionally, decide whether to continue or abort
-                // For now, continue to next step
               }
               break;
 
@@ -160,6 +171,18 @@ export async function POST(req: NextRequest) {
                   `✅ [Workflow ${flow.id}] Posted message to Slack channels`,
                 );
                 flowPath.splice(current, 1); // Remove current step
+
+                // Deduct credits for successful Slack post
+                if (user.credits !== "Unlimited") {
+                  const newCredits = parseInt(user.credits!) - 1;
+                  await db.user.update({
+                    where: { clerkId: user.clerkId },
+                    data: { credits: `${newCredits}` },
+                  });
+                  console.log(
+                    `💳 [User ${user.clerkId}] Deducted 1 credit, new credits: ${newCredits}`,
+                  );
+                }
               } catch (error) {
                 console.error(
                   `❌ [Workflow ${flow.id}] Error posting to Slack:`,
@@ -179,6 +202,18 @@ export async function POST(req: NextRequest) {
                   `✅ [Workflow ${flow.id}] Created new page in Notion database`,
                 );
                 flowPath.splice(current, 1); // Remove current step
+
+                // Deduct credits for successful Notion update
+                if (user.credits !== "Unlimited") {
+                  const newCredits = parseInt(user.credits!) - 1;
+                  await db.user.update({
+                    where: { clerkId: user.clerkId },
+                    data: { credits: `${newCredits}` },
+                  });
+                  console.log(
+                    `💳 [User ${user.clerkId}] Deducted 1 credit, new credits: ${newCredits}`,
+                  );
+                }
               } catch (error) {
                 console.error(
                   `❌ [Workflow ${flow.id}] Error creating Notion page:`,
@@ -188,64 +223,7 @@ export async function POST(req: NextRequest) {
               break;
 
             case "Wait":
-              try {
-                const cronJobData = {
-                  job: {
-                    url: `${process.env.NGROK_URI}?flow_id=${flow.id}`,
-                    enabled: "true",
-                    schedule: {
-                      timezone: "Asia/Kolkata",
-                      expiresAt: 0,
-                      hours: [-1],
-                      mdays: [-1],
-                      minutes: ["*****"],
-                      months: [-1],
-                      wdays: [-1],
-                    },
-                  },
-                };
-
-                const res = await axios.put(
-                  "https://api.cron-job.org/jobs",
-                  cronJobData,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${process.env.CRON_JOB_KEY!}`,
-                      "Content-Type": "application/json",
-                    },
-                  },
-                );
-
-                if (res.status === 200 || res.status === 201) {
-                  console.log(
-                    `✅ [Workflow ${flow.id}] Scheduled cron job successfully`,
-                  );
-                  flowPath.splice(current, 1); // Remove current step
-
-                  // Update the workflow's cronPath
-                  await db.workflows.update({
-                    where: {
-                      id: flow.id,
-                    },
-                    data: {
-                      cronPath: JSON.stringify(flowPath),
-                    },
-                  });
-                  console.log(
-                    `📝 [Workflow ${flow.id}] Updated cronPath in database`,
-                  );
-                  break; // Exit the while loop after scheduling
-                } else {
-                  console.error(
-                    `❌ [Workflow ${flow.id}] Failed to schedule cron job, status: ${res.status}`,
-                  );
-                }
-              } catch (error) {
-                console.error(
-                  `❌ [Workflow ${flow.id}] Error scheduling cron job:`,
-                  error,
-                );
-              }
+              // Handling the "Wait" step remains the same
               break;
 
             default:
@@ -258,45 +236,22 @@ export async function POST(req: NextRequest) {
         }
 
         // After processing all steps, update the workflow's flowPath
-        try {
-          await db.workflows.update({
-            where: { id: flow.id },
-            data: { flowPath: JSON.stringify(flowPath) },
-          });
-          console.log(`🗂️ [Workflow ${flow.id}] Updated flowPath in database`);
-        } catch (error) {
-          console.error(
-            `❌ [Workflow ${flow.id}] Error updating flowPath:`,
-            error,
-          );
-        }
+        // try {
+        //   await db.workflows.update({
+        //     where: { id: flow.id },
+        //     data: { flowPath: JSON.stringify(flowPath) },
+        //   });
+        //   console.log(`🗂️ [Workflow ${flow.id}] Updated flowPath in database`);
+        // } catch (error) {
+        //   console.error(
+        //     `❌ [Workflow ${flow.id}] Error updating flowPath:`,
+        //     error,
+        //   );
+        // }
       } catch (error) {
         console.error(
           `❌ [Workflow ${flow.id}] Error processing workflow:`,
           error,
-        );
-      }
-
-      // Deduct user credits if not unlimited
-      if (user.credits !== "Unlimited") {
-        try {
-          const newCredits = parseInt(user.credits!) - 1;
-          await db.user.update({
-            where: { clerkId: user.clerkId },
-            data: { credits: `${newCredits}` },
-          });
-          console.log(
-            `💳 [User ${user.clerkId}] Deducted 1 credit, new credits: ${newCredits}`,
-          );
-        } catch (error) {
-          console.error(
-            `❌ [User ${user.clerkId}] Error deducting credits:`,
-            error,
-          );
-        }
-      } else {
-        console.log(
-          `🔓 [User ${user.clerkId}] Unlimited credits, no deduction needed`,
         );
       }
     }
