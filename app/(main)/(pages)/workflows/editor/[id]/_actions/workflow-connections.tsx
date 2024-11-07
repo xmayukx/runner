@@ -25,7 +25,6 @@ export const onCreateNodeEdges = async (
 };
 
 export const onFlowPublish = async (workflowId: string, state: boolean) => {
-  console.log(state);
   const published = await db.workflows.update({
     where: {
       id: workflowId,
@@ -35,8 +34,8 @@ export const onFlowPublish = async (workflowId: string, state: boolean) => {
     },
   });
 
-  if (published) {
-    return { message: "Workflow Published" };
+  if (published && state) {
+    return { message: "true" };
   }
-  return { message: "Workflow not Published" };
+  return { message: "false" };
 };

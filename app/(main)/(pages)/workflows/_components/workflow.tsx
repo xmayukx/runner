@@ -27,10 +27,17 @@ export default function Workflow({ name, id, description, publish }: Props) {
       event.target.ariaChecked === "false",
     );
     if (response)
-      toast({
-        title: "Scheduled: Catch up",
-        description: "Friday, February 10, 2023 at 5:57 PM",
-      });
+      if (response.message === "true") {
+        return toast({
+          title: "Flow Published",
+          description: "Your flow has been published",
+        });
+      } else {
+        return toast({
+          title: "Flow Unpublished",
+          description: "Your flow has been unpublished",
+        });
+      }
   };
 
   return (
@@ -70,11 +77,7 @@ export default function Workflow({ name, id, description, publish }: Props) {
         <Label htmlFor="airplane-mode" className=" text-muted-foreground">
           {publish! ? "On" : "Off"}
         </Label>
-        <Switch
-          id="airplane-mode"
-          onClick={onPublishFlow}
-          defaultChecked={publish!}
-        ></Switch>
+        <Switch onClick={onPublishFlow} defaultChecked={publish!} />
       </div>
     </Card>
   );
