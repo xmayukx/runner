@@ -11,6 +11,16 @@ export const clashDisplay = localfont({
   variable: "--font-clash-display",
 });
 
+export const lausanne = localfont({
+  src: [
+    {
+      path: "../public/fonts/Lausanne.ttf",
+      style: "vietnamese",
+    },
+  ],
+  variable: "--font-lausanne",
+});
+
 export const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],

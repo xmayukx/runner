@@ -1,3 +1,4 @@
+// Navbar component
 import { ArrowRightIcon, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +13,9 @@ type Props = {};
 export const Navbar = async (props: Props) => {
   const user = await currentUser();
   return (
-    <header className="fixed right-0 left-0 top-0 py-4 px-4 bg-black/40 backdrop-blur-lg z-[100] flex items-center justify-between">
+    <header className="fixed right-0 left-0 top-[25px] py-4 px-4 bg-black/40 backdrop-blur-lg z-[100] flex items-center justify-between">
+      {" "}
+      {/* Adjust top to give space for NotificationBar */}
       <aside className=" flex items-center gap-[2px]">
         <Image
           width={15}
@@ -23,7 +26,6 @@ export const Navbar = async (props: Props) => {
         />
         <h1 className="text-xl font-medium text-white ml-2">Runner</h1>
       </aside>
-
       <aside className="flex items-center gap-4">
         <Link href="/workflows">
           <Button
@@ -38,7 +40,6 @@ export const Navbar = async (props: Props) => {
           </Button>
         </Link>
         {user ? <UserButton afterSwitchSessionUrl="/" /> : null}
-        <MenuIcon className="md:hidden" />
       </aside>
     </header>
   );

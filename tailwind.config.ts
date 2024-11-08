@@ -148,6 +148,7 @@ const config = {
       fontFamily: {
         clashDisplay: ["var(--font-clash-display)"],
         bric: ["var(--font-bric)"],
+        lausanne: ["var(--font-lausanne)"],
       },
     },
   },
